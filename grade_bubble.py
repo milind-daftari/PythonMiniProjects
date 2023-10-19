@@ -47,8 +47,8 @@ def add_text_field(input_file, output_file, page_number, x, y, width, height, de
     os.remove(output_file)
     os.rename(temp_output_file, output_file)
 
-def create_copies(input_file, output_folder, n, page_number, x, y, width, height):
-    for i in range(1, n+1):
+def create_copies(input_file, output_folder, start, end, page_number, x, y, width, height):
+    for i in range(start, end+1):
         output_file = os.path.join(output_folder, f'gradescope_bubble_out_{i}.pdf')
         add_text_field(input_file, output_file, page_number, x, y, width, height, str(i))
 
@@ -58,7 +58,9 @@ output_folder = r'OUTPUT_DIRECTORY'
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
-n = 10 # Number of copies
+start = 1  # Starting number
+end = 190  # Ending number
 page_number = 0  # First page
 x, y, width, height = 375, 108, 150, 25  # Position and size of the text field
-create_copies(input_file, output_folder, n, page_number, x, y, width, height)
+
+create_copies(input_file, output_folder, start, end, page_number, x, y, width, height)

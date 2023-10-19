@@ -52,6 +52,14 @@ def create_copies(input_file, output_folder, start, end, page_number, x, y, widt
         output_file = os.path.join(output_folder, f'gradescope_bubble_out_{i}.pdf')
         add_text_field(input_file, output_file, page_number, x, y, width, height, str(i))
 
+def merge_pdfs(pdfs, output_filename):
+    merger = fitz.open()  # create a new empty PDF
+    for pdf in pdfs:
+        with fitz.open(pdf) as mfile:
+            merger.insert_pdf(mfile)  # append the current PDF to the merger
+    merger.save(output_filename)  # save the merged PDFs
+    merger.close()
+
 # Example usage
 input_file = r'INPUT_DIRECTORY\gradescope_bubble.pdf'
 output_folder = r'OUTPUT_DIRECTORY'
@@ -64,3 +72,8 @@ page_number = 0  # First page
 x, y, width, height = 375, 108, 150, 25  # Position and size of the text field
 
 create_copies(input_file, output_folder, start, end, page_number, x, y, width, height)
+
+# Merge all generated PDFs
+pdf_files = [os.path.join(output_folder, f'gradescope_bubble_out_{i}.pdf') for i in range(start, end+1)]
+merged_output_file = os.path.join(output_folder, 'merged_gradescope_bubble.pdf')
+merge_pdfs(pdf_files, merged_output_file)
